@@ -11,10 +11,10 @@ int soma_array(int array[], int n){
 
 int main(int argc, char *argv[]) {
     
-    int array[]= {5, 7 , 9, 6};
-    int n = sizeof(array)/sizeof(0);
+    int array[]= {5, 7 , 9, 7};
+    int n = sizeof(array)/sizeof(int);
 
-    printf("Soma: %d", soma_array(array, n));
+    printf("Soma: %d \n", soma_array(array, n));
 
     return 0;
     
