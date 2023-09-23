@@ -9,7 +9,7 @@ int *multiplica_array(int array1[], int array2[], int tamanho) {
     return resultado;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     int array1[] = {5, 7, 9, 6};
     int array2[] = {5, 7, 9, 6};
     int tamanho = sizeof(array1) / sizeof(int);
