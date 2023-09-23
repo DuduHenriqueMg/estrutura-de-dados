@@ -2,22 +2,46 @@
 #include <stdlib.h>
 #include "bubble_sort.h"
 
-void imprimir_arr(int arr[], int n){
-    printf("\n");
-    for(int i = 0; i < n; i++){
-        printf("%d ", arr[i]);
+#define MAX_WORDS 1000
+#define MAX_WORD_LENGTH 100
+
+int main(int argc, char *argv[]) {
+    FILE *file = fopen(argv[1], "r");
+    if (file == NULL) {
+        printf("Não foi possível abrir o arquivo %s\n", argv[1]);
+        return 1;
     }
-    printf("\n");
-}
 
-int main(int argc, char* argv[]){
+    char **words = malloc(MAX_WORDS * sizeof(char *));
+    for (int i = 0; i < MAX_WORDS; i++) {
+        words[i] = malloc(MAX_WORD_LENGTH * sizeof(char));
+    }
 
-    int arr_inteiros[] = {54, 26, 93, 17, 77, 31, 44, 55, 20};
-    int n = sizeof(arr_inteiros) / sizeof(int);
-    
-    imprimir_arr(arr_inteiros, n);
-    bubble_sort(arr_inteiros, n);
-    imprimir_arr(arr_inteiros, n);
+    int count = 0;
+    while (fscanf(file, "%s", words[count]) != EOF && count < MAX_WORDS) {
+        count++;
+    }
 
-    exit(0);
+    fclose(file);
+
+    bubble_sort(words, count);
+
+    file = fopen("arq_palavras_ordenado.txt", "w");
+    if (file == NULL) {
+        printf("Não foi possível abrir o arquivo arq_palavras_ordenado.txt\n");
+        return 1;
+    }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(file, "%s\n", words[i]);
+    }
+
+    fclose(file);
+
+    for (int i = 0; i < MAX_WORDS; i++) {
+        free(words[i]);
+    }
+    free(words);
+
+    return 0;
 }
