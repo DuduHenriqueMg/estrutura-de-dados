@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "lista.h"
+#include "lista.h"*
 
 int main() {
   // Cria uma lista vazia
