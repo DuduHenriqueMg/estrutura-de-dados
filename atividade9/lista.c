@@ -1,53 +1,71 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "lista.h"
 
-
-No* lista_criar() {
-  return NULL;
-}
-
-void lista_inserir_inicio(No* L, char valor) {
-  No* novo = (No*)malloc(sizeof(No));
-  novo->valor = valor;
-  novo->proximo = L;
-  L = novo;
-}
-
-void lista_imprimir(No* L) {
-  if (L == NULL) {
-    printf("Lista vazia.\n");
-    return;
-  }
-
-  while (L != NULL) {
-    printf("%c ", L->valor);
-    L = L->proximo;
-  }
-
-  printf("\n");
-}
-
-int lista_verificar_existencia(No* L, char valor_busca) {
-  while (L != NULL) {
-    if (L->valor == valor_busca) {
-      return 1;
+No* no(float valor, No* proximo_no){
+    No* no = malloc(sizeof(No));
+    if(no == NULL){
+        perror("erro ao alocar memoria");
+        exit(1);
     }
-    L = L->proximo;
-  }
-
-  return 0;
+    no->valor = valor;
+    no->proximo_no = proximo_no;
+    return no;
 }
 
-int lista_verificar_ocorrencias(No* L, char valor_busca) {
-  int ocorrencias = 0;
-
-  while (L != NULL) {
-    if (L->valor == valor_busca) {
-      ocorrencias++;
+void lista_inserir_no(No* L, No* no){
+    if(L != NULL){
+        if(L->proximo_no == NULL){
+            L->proximo_no = no;
+        }
+        else{
+            lista_inserir_no(L->proximo_no, no);
+        }
     }
-    L = L->proximo;
-  }
+}
 
-  return ocorrencias;
+void lista_inserir_no_ordenado(No** L, No* no){
+    if(*L != NULL){
+        if((*L)->valor >= no->valor){
+            no->proximo_no = *L;
+            *L = no;
+        }else if((*L)->proximo_no != NULL){
+            lista_inserir_no_ordenado(&(*L)->proximo_no, no);
+        }
+        else{
+            (*L)->proximo_no = no;
+        }
+    }
+}
+
+void lista_imprimir(No* L){
+    if(L != NULL){
+        printf("%.2f ", L->valor);
+        lista_imprimir(L->proximo_no);
+    }
+}
+
+int lista_quantidade_nos(No* L){
+    if(L != NULL){
+        return 1 + lista_quantidade_nos(L->proximo_no);
+    }
+    return 0;
+}
+
+No* lista_copiar(No* L){
+    if(L != NULL){
+        return no(L->valor, lista_copiar(L->proximo_no));
+    }
+    return NULL;
+}
+
+void lista_concatenar(No* L, No* Lc){
+    lista_inserir_no(L, Lc);
+}
+
+void lista_liberar(No* L){
+    if(L != NULL){
+        lista_liberar(L->proximo_no);
+        free(L);
+    }
 }
